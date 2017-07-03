@@ -43,8 +43,12 @@ public class UserController {
                 StringBuffer callbackURL = request.getRequestURL();
                 int index = callbackURL.lastIndexOf("/");
                 callbackURL.replace(index, callbackURL.length(), "").append("/callback");
-                requestToken = twitter.getOAuthRequestToken(callbackURL.toString());
-                request.getSession().setAttribute("requestToken", requestToken);
+                if ( request.getSession().getAttribute("requestToken")!= null){
+                    requestToken = (RequestToken) request.getSession().getAttribute("requestToken");
+                }else {
+                    requestToken = twitter.getOAuthRequestToken(callbackURL.toString());
+                    request.getSession().setAttribute("requestToken", requestToken);
+                }
                 return "redirect:" + requestToken.getAuthenticationURL();
             } catch (TwitterException e) {
                 e.printStackTrace();
@@ -56,7 +60,7 @@ public class UserController {
                 request.getSession().setAttribute("twitter", twitter);
                 TweetUtils.setTwitter(twitter);
             }
-            return "redirect:/";
+            return "redirect:/main";
         }
     }
 
@@ -76,6 +80,6 @@ public class UserController {
         } catch (TwitterException e) {
             e.printStackTrace();
         }
-        return "redirect:/";
+        return "redirect:/main";
     }
 }

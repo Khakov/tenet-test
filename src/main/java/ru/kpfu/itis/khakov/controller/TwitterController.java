@@ -16,7 +16,7 @@ import java.util.Set;
 
 /**
  * @author Rustam Khakov on 01.07.2017.
- * Основной контроллер
+ *         Основной контроллер
  */
 @Controller
 public class TwitterController {
@@ -26,6 +26,11 @@ public class TwitterController {
     HttpServletRequest request;
 
     @GetMapping("/")
+    public String getStartPage() {
+        return "start_page";
+    }
+
+    @GetMapping("/main")
     public String getMainPage(ModelMap map) throws TwitterException {
         // The factory instance is re-useable and thread safe.
         if (request.getSession().getAttribute("twitter") == null) {

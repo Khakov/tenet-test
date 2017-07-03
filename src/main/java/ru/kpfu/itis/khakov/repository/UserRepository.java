@@ -38,8 +38,9 @@ public class UserRepository {
     }
 
     public User insertUser(User user) {
-        jdbcTemplate.update("INSERT INTO users VALUES(?,?,?,?,?)",
-                new Object[]{user.getId(),user.getUsername(), user.getPassword(),
+        jdbcTemplate.update("INSERT INTO users (username, password, " +
+                        "access_token, secret_access_token) VALUES(?,?,?,?)",
+                new Object[]{user.getUsername(), user.getPassword(),
                         user.getAccessToken(), user.getSecretAccessToken()});
         return user;
     }
