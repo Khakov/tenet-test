@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-3.1.xsd
+    http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
+
+    <context:component-scan base-package="ru.kpfu.itis.khakov.repository"/>
+    <context:component-scan base-package="ru.kpfu.itis.khakov.service"/>
+    <context:component-scan base-package="ru.kpfu.itis.khakov.utils"/>
+    <context:property-placeholder
+            location="classpath*:db/config/database.properties, classpath*:twitter.properties"
+            ignore-unresolvable="true"
+    />
+    <task:annotation-driven/>
+    <!--database config-->
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="${db.driver}"/>
+        <property name="url" value="${db.url}"/>
+        <property name="username" value="${db.username}"/>
+        <property name="password" value="${db.password}"/>
+    </bean>
+
+    <!--liquibase config-->
+    <bean id="liquibase" class="liquibase.integration.spring.SpringLiquibase">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="changeLog" value="classpath:db/changelog.xml"/>
+        <property name="contexts" value="test, production"/>
+    </bean>
+    <!--jdbc template-->
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <!--bcrypt encoder-->
+    <bean id="bCryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+    <!--uesr-->
+    <bean id="currentUser" class="ru.kpfu.itis.khakov.entity.User" factory-bean="userRepository"
+          factory-method="getUserByLoginAndPassword" scope="prototype">
+        <constructor-arg type="java.lang.String" name="login" value="${twitter.username}"/>
+        <constructor-arg type="java.lang.String" name="password" value="${twitter.password}"/>
+    </bean>
+</beans>

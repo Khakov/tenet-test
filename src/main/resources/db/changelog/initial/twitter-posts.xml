@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+    <changeSet id="twitter-posts_0" author="r.khakov">
+        <createTable tableName="posts">
+            <column name="id" type="bigint"/>
+            <column name="author" type="varchar(255)"/>
+            <column name="text" type="text"/>
+            <column name="date" type="bigint"/>
+            <column name="retweet_count" type="int"/>
+            <column name="favorite_count" type="int"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="twitter-posts_1" author="r.khakov">
+        <addPrimaryKey tableName="posts"
+                       columnNames="id"
+                       constraintName="post_pk"/>
+    </changeSet>
+</databaseChangeLog>

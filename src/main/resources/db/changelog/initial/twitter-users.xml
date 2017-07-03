@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+    <changeSet id="twitter-users_0" author="r.khakov">
+        <createTable tableName="users">
+            <column name="id" type="bigint"/>
+            <column name="username" type="varchar(255)"/>
+            <column name="password" type="varchar(255)"/>
+            <column name="access_token" type="varchar(255)"/>
+            <column name="secret_access_token" type="varchar(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="twitter-users_1" author="r.khakov">
+        <addPrimaryKey tableName="users"
+                       columnNames="id"
+                       constraintName="user_pk"/>
+    </changeSet>
+
+    <changeSet id="twitter-users_2" author="r.khakov">
+        <createSequence sequenceName="user_seq"
+                        startValue="1"
+                        incrementBy="1"/>
+    </changeSet>
+</databaseChangeLog>
